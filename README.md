@@ -20,6 +20,6 @@ Run `now login` to login to (or create) an account.
 
 Now you can use `datasette publish now` to publish your data:
 
-    datasette publish now2 my-database.db
+    datasette publish now2 my-database.db --project=my-database
 
-A unique URL will be created automatically for your deployment.
+The `--project` argument is required - it specifies the project name that should be used for your deployment. This will be used as part of the deployment's URL.

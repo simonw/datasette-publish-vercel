@@ -9,6 +9,19 @@ def test_publish_now_requires_now_cli(mock_which):
     runner = CliRunner()
     with runner.isolated_filesystem():
         open("test.db", "w").write("data")
-        result = runner.invoke(cli.cli, ["publish", "now2", "test.db"])
+        result = runner.invoke(
+            cli.cli, ["publish", "now2", "test.db", "--project", "foo"]
+        )
         assert result.exit_code == 1
         assert "Publishing to Zeit Now requires now to be installed" in result.output
+
+
+@mock.patch("shutil.which")
+def test_publish_now_requires_project(mock_which):
+    mock_which.return_value = True
+    runner = CliRunner()
+    with runner.isolated_filesystem():
+        open("test.db", "w").write("data")
+        result = runner.invoke(cli.cli, ["publish", "now2", "test.db"])
+        assert result.exit_code == 2
+        assert "Missing option '--project'" in result.output
