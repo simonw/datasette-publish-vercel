@@ -49,6 +49,9 @@ def publish_subcommand(publish):
         help="Zeit Now project name to use",
         required=True,
     )
+    @click.option(
+        "--no-prod", is_flag=True, help="Don't deploy directly to production",
+    )
     def now2(
         files,
         metadata,
@@ -69,6 +72,7 @@ def publish_subcommand(publish):
         about_url,
         token,
         project,
+        no_prod,
     ):
         fail_if_publish_binary_not_installed(
             "now", "Zeit Now", "https://zeit.co/download"
@@ -131,4 +135,7 @@ def publish_subcommand(publish):
             open("requirements.txt", "w").write(
                 "\n".join([datasette_install] + list(install))
             )
-            run(["now"])
+            cmd = ["now", "--confirm", "--no-clipboard"]
+            if not no_prod:
+                cmd.append("--prod")
+            run(cmd)
