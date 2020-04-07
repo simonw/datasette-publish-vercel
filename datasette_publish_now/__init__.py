@@ -12,8 +12,16 @@ import re
 
 INDEX_PY = """
 from datasette.app import Datasette
+import json
 
-app = Datasette([], {database_files}{extras}).app()
+
+metadata = dict()
+try:
+    metadata = json.load(open("metadata.json"))
+except Exception:
+    pass
+
+app = Datasette([], {database_files}, metadata=metadata{extras}).app()
 """.strip()
 
 project_name_re = re.compile(r"^[a-z0-9][a-z0-9-]{1,51}$")
