@@ -52,6 +52,9 @@ def publish_subcommand(publish):
     @click.option(
         "--no-prod", is_flag=True, help="Don't deploy directly to production",
     )
+    @click.option(
+        "--debug", is_flag=True, help="Enable Now CLI debug output",
+    )
     def now2(
         files,
         metadata,
@@ -73,6 +76,7 @@ def publish_subcommand(publish):
         token,
         project,
         no_prod,
+        debug,
     ):
         fail_if_publish_binary_not_installed(
             "now", "Zeit Now", "https://zeit.co/download"
@@ -136,6 +140,8 @@ def publish_subcommand(publish):
                 "\n".join([datasette_install] + list(install))
             )
             cmd = ["now", "--confirm", "--no-clipboard"]
+            if debug:
+                cmd.append("--debug")
             if not no_prod:
                 cmd.append("--prod")
             run(cmd)
