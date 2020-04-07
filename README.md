@@ -28,7 +28,7 @@ The `--project` argument is required - it specifies the project name that should
 
 * `--no-prod` deploys to the project without updating the "production" URL alias to point to that new deployment. Without that option all deploys go directly to production.
 * `--debug` enables the Now CLI debug output
-* `--token` allows you to pass a Now authentication token, rather than needing to first run `now login' to configure the tool
+* `--token` allows you to pass a Now authentication token, rather than needing to first run `now login` to configure the tool
 
 ### Full help
 
