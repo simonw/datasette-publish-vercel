@@ -37,7 +37,7 @@ The `--project` argument is required - it specifies the project name that should
 * `--extra-options`
 * `--static`
 * `--plugin-secret`
-* `--version_note`
+* `--version-note`
 
 ```
 $ datasette publish now2 --help
