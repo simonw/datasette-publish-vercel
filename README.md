@@ -42,29 +42,20 @@ The `--project` argument is required - it specifies the project name that should
 
 ```
 $ datasette publish now2 --help
+
 Usage: datasette publish now2 [OPTIONS] [FILES]...
 
 Options:
-  -m, --metadata FILENAME         Path to JSON/YAML file containing metadata
-                                  to publish
-
+  -m, --metadata FILENAME         Path to JSON/YAML file containing metadata to publish
   --extra-options TEXT            Extra options to pass to datasette serve
-  --branch TEXT                   Install datasette from a GitHub branch e.g.
-                                  master
-
-  --template-dir DIRECTORY        Path to directory containing custom
-                                  templates
-
+  --branch TEXT                   Install datasette from a GitHub branch e.g. master
+  --template-dir DIRECTORY        Path to directory containing custom templates
   --plugins-dir DIRECTORY         Path to directory containing custom plugins
-  --static MOUNT:DIRECTORY        Serve static files from this directory at
-                                  /MOUNT/...
-
-  --install TEXT                  Additional packages (e.g. plugins) to
-                                  install
-
+  --static MOUNT:DIRECTORY        Serve static files from this directory at /MOUNT/...
+  --install TEXT                  Additional packages (e.g. plugins) to install
   --plugin-secret <TEXT TEXT TEXT>...
-                                  Secrets to pass to plugins, e.g. --plugin-
-                                  secret datasette-auth-github client_id xxx
+                                  Secrets to pass to plugins, e.g. --plugin-secret
+                                  datasette-auth-github client_id xxx
 
   --version-note TEXT             Additional note to show on /-/versions
   --title TEXT                    Title for metadata

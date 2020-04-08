@@ -1,6 +1,8 @@
 from click.testing import CliRunner
 from datasette import cli
 from unittest import mock
+import pathlib
+import re
 import subprocess
 
 
@@ -60,3 +62,30 @@ def test_publish_now_public(mock_run, mock_which):
         mock_run.assert_has_calls(
             [mock.call(["now", "--confirm", "--no-clipboard", "--prod", "--public"]),]
         )
+
+
+def test_help_in_readme(request):
+    # Ensure the --help output embedded in the README is up-to-date
+    readme_path = pathlib.Path(__file__).parent.parent / "README.md"
+    readme = readme_path.read_text()
+    block_re = re.compile("```(.*)```", re.DOTALL)
+    expected = block_re.search(readme).group(1).strip()
+    runner = CliRunner()
+    result = runner.invoke(cli.cli, ["publish", "now2", "--help"], terminal_width=88)
+    actual = "$ datasette publish now2 --help\n\n{}".format(result.output)
+
+    if request.config.getoption("--rewrite-readme"):
+        readme_path.write_text(
+            block_re.sub(
+                "```\n{}```".format(actual).replace("Usage: cli", "Usage: datasette"),
+                readme,
+            )
+        )
+        return
+
+    # actual has "Usage: cli package [OPTIONS] FILES"
+    # because it doesn't know that cli will be aliased to datasette
+    expected = expected.replace("Usage: datasette", "Usage: cli")
+    assert (
+        expected.strip() == actual.strip()
+    ), "README out of date - try runnning: pytest --rewrite-readme"
