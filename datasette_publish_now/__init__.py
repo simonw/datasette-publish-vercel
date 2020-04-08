@@ -55,6 +55,9 @@ def publish_subcommand(publish):
     @click.option(
         "--debug", is_flag=True, help="Enable Now CLI debug output",
     )
+    @click.option(
+        "--public", is_flag=True, help="Publish source with Now CLI --public",
+    )
     def now2(
         files,
         metadata,
@@ -77,6 +80,7 @@ def publish_subcommand(publish):
         project,
         no_prod,
         debug,
+        public,
     ):
         fail_if_publish_binary_not_installed(
             "now", "Zeit Now", "https://zeit.co/download"
@@ -144,4 +148,6 @@ def publish_subcommand(publish):
                 cmd.append("--debug")
             if not no_prod:
                 cmd.append("--prod")
+            if public:
+                cmd.append("--public")
             run(cmd)

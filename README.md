@@ -29,6 +29,7 @@ The `--project` argument is required - it specifies the project name that should
 * `--no-prod` deploys to the project without updating the "production" URL alias to point to that new deployment. Without that option all deploys go directly to production.
 * `--debug` enables the Now CLI debug output
 * `--token` allows you to pass a Now authentication token, rather than needing to first run `now login` to configure the tool
+* `--public` runs `now --public` to publish the application source code at `/_src` - e.g. https://datasette-public.now.sh/_src
 
 ### Full help
 
@@ -77,5 +78,6 @@ Options:
   --project PROJECT               Zeit Now project name to use  [required]
   --no-prod                       Don't deploy directly to production
   --debug                         Enable Now CLI debug output
+  --public                        Publish source with Now CLI --public
   --help                          Show this message and exit.
 ```
