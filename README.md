@@ -46,7 +46,7 @@ $ datasette publish now2 --help
 Usage: datasette publish now2 [OPTIONS] [FILES]...
 
 Options:
-  -m, --metadata FILENAME         Path to JSON/YAML file containing metadata to publish
+  -m, --metadata FILENAME         Path to JSON file containing metadata to publish
   --extra-options TEXT            Extra options to pass to datasette serve
   --branch TEXT                   Install datasette from a GitHub branch e.g. master
   --template-dir DIRECTORY        Path to directory containing custom templates
