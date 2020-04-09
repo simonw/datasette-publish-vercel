@@ -148,7 +148,7 @@ def publish_subcommand(publish):
                     branch
                 )
             open("requirements.txt", "w").write(
-                "\n".join([datasette_install] + list(install))
+                "\n".join([datasette_install, "pysqlite3-binary"] + list(install))
             )
             if generate_dir:
                 # Copy these to the specified directory

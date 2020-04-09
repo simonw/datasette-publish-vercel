@@ -3,6 +3,7 @@ from datasette import cli
 from unittest import mock
 import os
 import pathlib
+import pytest
 import re
 import subprocess
 
@@ -65,9 +66,11 @@ def test_publish_now_public(mock_run, mock_which):
         )
 
 
+@pytest.fixture(scope="session")
 @mock.patch("shutil.which")
 @mock.patch("datasette_publish_now.run")
-def test_publish_now_generate(mock_run, mock_which, tmpdir):
+def generated_app_dir(mock_run, mock_which, tmp_path_factory):
+    appdir = os.path.join(tmp_path_factory.mktemp("generated-app"), "app")
     mock_which.return_value = True
     mock_run.return_value = mock.Mock(0)
     runner = CliRunner()
@@ -83,14 +86,27 @@ def test_publish_now_generate(mock_run, mock_which, tmpdir):
                 "foo",
                 "--public",
                 "--generate-dir",
-                tmpdir / "out",
+                appdir,
             ],
         )
         assert result.exit_code == 0
         assert not mock_run.called
+    return appdir
+
+
+def test_publish_now_generate(generated_app_dir):
     # Test that the correct files were generated
-    filenames = set(os.listdir(tmpdir / "out"))
+    filenames = set(os.listdir(generated_app_dir))
     assert {"requirements.txt", "index.py", "now.json", "test.db"} == filenames
+
+
+def test_publish_now_requiremens(generated_app_dir):
+    requirements = set(
+        l.strip()
+        for l in open(os.path.join(generated_app_dir, "requirements.txt")).readlines()
+        if l.strip()
+    )
+    assert {"datasette", "pysqlite3-binary"} == requirements
 
 
 def test_help_in_readme(request):
