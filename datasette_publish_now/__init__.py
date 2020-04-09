@@ -9,6 +9,7 @@ import click
 import json
 import os
 import re
+import shutil
 
 INDEX_PY = """
 from datasette.app import Datasette
@@ -58,6 +59,11 @@ def publish_subcommand(publish):
     @click.option(
         "--public", is_flag=True, help="Publish source with Now CLI --public",
     )
+    @click.option(
+        "--generate-dir",
+        type=click.Path(dir_okay=True, file_okay=False),
+        help="Output generated application files here",
+    )
     def now2(
         files,
         metadata,
@@ -81,6 +87,7 @@ def publish_subcommand(publish):
         no_prod,
         debug,
         public,
+        generate_dir,
     ):
         fail_if_publish_binary_not_installed(
             "now", "Zeit Now", "https://zeit.co/download"
@@ -143,11 +150,23 @@ def publish_subcommand(publish):
             open("requirements.txt", "w").write(
                 "\n".join([datasette_install] + list(install))
             )
-            cmd = ["now", "--confirm", "--no-clipboard"]
-            if debug:
-                cmd.append("--debug")
-            if not no_prod:
-                cmd.append("--prod")
-            if public:
-                cmd.append("--public")
-            run(cmd)
+            if generate_dir:
+                # Copy these to the specified directory
+                shutil.copytree(".", generate_dir)
+                click.echo(
+                    "Your generated application files have been written to:", err=True
+                )
+                click.echo("    {}\n".format(generate_dir), err=True)
+                click.echo("To deploy using Zeit Now, run the following:")
+                click.echo("    cd {}".format(generate_dir), err=True)
+                click.echo("    now --prod".format(generate_dir), err=True)
+            else:
+                # Run the deploy with now
+                cmd = ["now", "--confirm", "--no-clipboard"]
+                if debug:
+                    cmd.append("--debug")
+                if not no_prod:
+                    cmd.append("--prod")
+                if public:
+                    cmd.append("--public")
+                run(cmd)

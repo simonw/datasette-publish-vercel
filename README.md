@@ -30,6 +30,7 @@ The `--project` argument is required - it specifies the project name that should
 * `--debug` enables the Now CLI debug output
 * `--token` allows you to pass a Now authentication token, rather than needing to first run `now login` to configure the tool
 * `--public` runs `now --public` to publish the application source code at `/_src` - e.g. https://datasette-public.now.sh/_src
+* `--generate-dir` - by default this tool generates a new Now app in a temporary directory, deploys it and then deletes the directory. Use `--generate-dir=my-app` to output the generated application files to a new directory of your choice instead. You can then deploy it by running `now` in that directory.
 
 ### Full help
 
@@ -70,5 +71,6 @@ Options:
   --no-prod                       Don't deploy directly to production
   --debug                         Enable Now CLI debug output
   --public                        Publish source with Now CLI --public
+  --generate-dir DIRECTORY        Output generated application files here
   --help                          Show this message and exit.
 ```
