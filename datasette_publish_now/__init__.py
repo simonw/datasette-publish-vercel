@@ -169,4 +169,6 @@ def publish_subcommand(publish):
                     cmd.append("--prod")
                 if public:
                     cmd.append("--public")
+                if token:
+                    cmd.extend(["--token", token])
                 run(cmd)

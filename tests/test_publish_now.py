@@ -66,6 +66,28 @@ def test_publish_now_public(mock_run, mock_which):
         )
 
 
+@mock.patch("shutil.which")
+@mock.patch("datasette_publish_now.run")
+def test_publish_now_token(mock_run, mock_which):
+    mock_which.return_value = True
+    mock_run.return_value = mock.Mock(0)
+    runner = CliRunner()
+    with runner.isolated_filesystem():
+        open("test.db", "w").write("data")
+        result = runner.invoke(
+            cli.cli,
+            ["publish", "now2", "test.db", "--project", "foo", "--token", "xyz"],
+        )
+        assert result.exit_code == 0
+        mock_run.assert_has_calls(
+            [
+                mock.call(
+                    ["now", "--confirm", "--no-clipboard", "--prod", "--token", "xyz"]
+                ),
+            ]
+        )
+
+
 @pytest.fixture(scope="session")
 @mock.patch("shutil.which")
 @mock.patch("datasette_publish_now.run")
@@ -100,7 +122,7 @@ def test_publish_now_generate(generated_app_dir):
     assert {"requirements.txt", "index.py", "now.json", "test.db"} == filenames
 
 
-def test_publish_now_requiremens(generated_app_dir):
+def test_publish_now_requirements(generated_app_dir):
     requirements = set(
         l.strip()
         for l in open(os.path.join(generated_app_dir, "requirements.txt")).readlines()
