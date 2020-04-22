@@ -14,7 +14,7 @@ def get_long_description():
 
 setup(
     name="datasette-publish-now",
-    description="Datasette plugin for publishing data using Zeit Now",
+    description="Datasette plugin for publishing data using Vercel",
     long_description=get_long_description(),
     long_description_content_type="text/markdown",
     author="Simon Willison",

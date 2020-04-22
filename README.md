@@ -4,7 +4,7 @@
 [![CircleCI](https://circleci.com/gh/simonw/datasette-publish-now.svg?style=svg)](https://circleci.com/gh/simonw/datasette-publish-now)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/simonw/datasette-publish-now/blob/master/LICENSE)
 
-Datasette plugin for publishing data using [Zeit Now](https://now.io/).
+Datasette plugin for publishing data using [Vercel](https://vercel.com/).
 
 ## Installation
 
@@ -14,13 +14,13 @@ Install this plugin in the same environment as Datasette.
 
 ## Usage
 
-First, install the Zeit Now CLI tool by [following their instructions](https://zeit.co/download).
+First, install the Vercel CLI tool by [following their instructions](https://vercel.com/download).
 
 Run `now login` to login to (or create) an account.
 
 Now you can use `datasette publish now` to publish your data:
 
-    datasette publish now2 my-database.db --project=my-database
+    datasette publish now my-database.db --project=my-database
 
 The `--project` argument is required - it specifies the project name that should be used for your deployment. This will be used as part of the deployment's URL.
 
@@ -42,12 +42,12 @@ The `--project` argument is required - it specifies the project name that should
 * `--version-note`
 
 ```
-$ datasette publish now2 --help
+$ datasette publish now --help
 
-Usage: datasette publish now2 [OPTIONS] [FILES]...
+Usage: datasette publish now [OPTIONS] [FILES]...
 
 Options:
-  -m, --metadata FILENAME         Path to JSON file containing metadata to publish
+  -m, --metadata FILENAME         Path to JSON/YAML file containing metadata to publish
   --extra-options TEXT            Extra options to pass to datasette serve
   --branch TEXT                   Install datasette from a GitHub branch e.g. master
   --template-dir DIRECTORY        Path to directory containing custom templates
@@ -67,7 +67,7 @@ Options:
   --about TEXT                    About label for metadata
   --about_url TEXT                About URL for metadata
   --token TEXT                    Auth token to use for deploy
-  --project PROJECT               Zeit Now project name to use  [required]
+  --project PROJECT               Vercel project name to use  [required]
   --no-prod                       Don't deploy directly to production
   --debug                         Enable Now CLI debug output
   --public                        Publish source with Now CLI --public

@@ -47,7 +47,7 @@ def publish_subcommand(publish):
     @click.option(
         "--project",
         type=ProjectName(),
-        help="Zeit Now project name to use",
+        help="Vercel project name to use",
         required=True,
     )
     @click.option(
@@ -64,7 +64,7 @@ def publish_subcommand(publish):
         type=click.Path(dir_okay=True, file_okay=False),
         help="Output generated application files here",
     )
-    def now2(
+    def now(
         files,
         metadata,
         extra_options,
@@ -90,7 +90,7 @@ def publish_subcommand(publish):
         generate_dir,
     ):
         fail_if_publish_binary_not_installed(
-            "now", "Zeit Now", "https://zeit.co/download"
+            "now", "Vercel", "https://vercel.com/download"
         )
         extra_metadata = {
             "title": title,
@@ -157,7 +157,7 @@ def publish_subcommand(publish):
                     "Your generated application files have been written to:", err=True
                 )
                 click.echo("    {}\n".format(generate_dir), err=True)
-                click.echo("To deploy using Zeit Now, run the following:")
+                click.echo("To deploy using Vercel, run the following:")
                 click.echo("    cd {}".format(generate_dir), err=True)
                 click.echo("    now --prod".format(generate_dir), err=True)
             else:
