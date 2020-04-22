@@ -34,7 +34,7 @@ The `--project` argument is required - it specifies the project name that should
 
 ### Full help
 
-**Warning:** Some of these options are not yet implemented in the alpha version of this plugin. In particular, the following do not yet work:
+**Warning:** Some of these options are not yet implemented by this plugin. In particular, the following do not yet work:
 
 * `--extra-options`
 * `--static`
