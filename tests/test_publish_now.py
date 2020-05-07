@@ -6,6 +6,7 @@ import pathlib
 import pytest
 import re
 import subprocess
+import textwrap
 
 
 @mock.patch("shutil.which")
@@ -120,6 +121,20 @@ def test_publish_now_generate(generated_app_dir):
     # Test that the correct files were generated
     filenames = set(os.listdir(generated_app_dir))
     assert {"requirements.txt", "index.py", "now.json", "test.db"} == filenames
+    index_py = open(os.path.join(generated_app_dir, "index.py")).read()
+    assert textwrap.dedent("""
+    from datasette.app import Datasette
+    import json
+
+
+    metadata = dict()
+    try:
+        metadata = json.load(open("metadata.json"))
+    except Exception:
+        pass
+
+    app = Datasette([], ["test.db"], metadata=metadata, cors=True).app()
+    """).strip() == index_py.strip()
 
 
 def test_publish_now_requirements(generated_app_dir):

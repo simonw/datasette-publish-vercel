@@ -22,7 +22,7 @@ try:
 except Exception:
     pass
 
-app = Datasette([], {database_files}, metadata=metadata{extras}).app()
+app = Datasette([], {database_files}, metadata=metadata{extras}, cors=True).app()
 """.strip()
 
 project_name_re = re.compile(r"^[a-z0-9][a-z0-9-]{1,51}$")
