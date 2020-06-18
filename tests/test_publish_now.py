@@ -42,11 +42,22 @@ def test_publish_now(mock_run, mock_which):
     with runner.isolated_filesystem():
         open("test.db", "w").write("data")
         result = runner.invoke(
-            cli.cli, ["publish", "now", "test.db", "--project", "foo"],
+            cli.cli, ["publish", "now", "test.db", "--project", "foo", "--secret", "S"],
         )
         assert result.exit_code == 0
         mock_run.assert_has_calls(
-            [mock.call(["now", "--confirm", "--no-clipboard", "--prod"]),]
+            [
+                mock.call(
+                    [
+                        "now",
+                        "--confirm",
+                        "--no-clipboard",
+                        "--prod",
+                        "--env",
+                        "DATASETTE_SECRET=S",
+                    ]
+                ),
+            ]
         )
 
 
@@ -59,11 +70,33 @@ def test_publish_now_public(mock_run, mock_which):
     with runner.isolated_filesystem():
         open("test.db", "w").write("data")
         result = runner.invoke(
-            cli.cli, ["publish", "now", "test.db", "--project", "foo", "--public"],
+            cli.cli,
+            [
+                "publish",
+                "now",
+                "test.db",
+                "--project",
+                "foo",
+                "--public",
+                "--secret",
+                "S",
+            ],
         )
         assert result.exit_code == 0
         mock_run.assert_has_calls(
-            [mock.call(["now", "--confirm", "--no-clipboard", "--prod", "--public"]),]
+            [
+                mock.call(
+                    [
+                        "now",
+                        "--confirm",
+                        "--no-clipboard",
+                        "--prod",
+                        "--public",
+                        "--env",
+                        "DATASETTE_SECRET=S",
+                    ]
+                ),
+            ]
         )
 
 
@@ -77,13 +110,32 @@ def test_publish_now_token(mock_run, mock_which):
         open("test.db", "w").write("data")
         result = runner.invoke(
             cli.cli,
-            ["publish", "now", "test.db", "--project", "foo", "--token", "xyz"],
+            [
+                "publish",
+                "now",
+                "test.db",
+                "--project",
+                "foo",
+                "--token",
+                "xyz",
+                "--secret",
+                "S",
+            ],
         )
         assert result.exit_code == 0
         mock_run.assert_has_calls(
             [
                 mock.call(
-                    ["now", "--confirm", "--no-clipboard", "--prod", "--token", "xyz"]
+                    [
+                        "now",
+                        "--confirm",
+                        "--no-clipboard",
+                        "--prod",
+                        "--token",
+                        "xyz",
+                        "--env",
+                        "DATASETTE_SECRET=S",
+                    ]
                 ),
             ]
         )
@@ -122,7 +174,9 @@ def test_publish_now_generate(generated_app_dir):
     filenames = set(os.listdir(generated_app_dir))
     assert {"requirements.txt", "index.py", "now.json", "test.db"} == filenames
     index_py = open(os.path.join(generated_app_dir, "index.py")).read()
-    assert textwrap.dedent("""
+    assert (
+        textwrap.dedent(
+            """
     from datasette.app import Datasette
     import json
 
@@ -134,7 +188,10 @@ def test_publish_now_generate(generated_app_dir):
         pass
 
     app = Datasette([], ["test.db"], metadata=metadata, cors=True).app()
-    """).strip() == index_py.strip()
+    """
+        ).strip()
+        == index_py.strip()
+    )
 
 
 def test_publish_now_requirements(generated_app_dir):

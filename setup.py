@@ -23,7 +23,7 @@ setup(
     version=VERSION,
     packages=["datasette_publish_now"],
     entry_points={"datasette": ["publish_now = datasette_publish_now"]},
-    install_requires=["datasette>=0.40,<0.44"],
+    install_requires=["datasette>=0.44"],
     extras_require={"test": ["pytest"]},
     tests_require=["datasette-publish-now[test]"],
 )

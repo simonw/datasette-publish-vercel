@@ -75,6 +75,7 @@ def publish_subcommand(publish):
         install,
         plugin_secret,
         version_note,
+        secret,
         title,
         license,
         license_url,
@@ -114,6 +115,7 @@ def publish_subcommand(publish):
             install,
             False,
             version_note,
+            secret,
             extra_metadata,
             port=8080,
         ):
@@ -171,4 +173,6 @@ def publish_subcommand(publish):
                     cmd.append("--public")
                 if token:
                     cmd.extend(["--token", token])
+                # Add the secret
+                cmd.extend(["--env", "DATASETTE_SECRET={}".format(secret)])
                 run(cmd)
