@@ -1,6 +1,7 @@
 # datasette-publish-now
 
 [![PyPI](https://img.shields.io/pypi/v/datasette-publish-now.svg)](https://pypi.org/project/datasette-publish-now/)
+[![GitHub changelog](https://img.shields.io/github/v/release/simonw/datasette-publish-now?include_prereleases&label=changelog)](https://github.com/simonw/datasette-publish-now/releases)
 [![CircleCI](https://circleci.com/gh/simonw/datasette-publish-now.svg?style=svg)](https://circleci.com/gh/simonw/datasette-publish-now)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/simonw/datasette-publish-now/blob/master/LICENSE)
 
