@@ -43,9 +43,11 @@ The `--project` argument is required - it specifies the project name that should
 * `--version-note`
 
 ```
-$ datasette publish now --help
+$ datasette publish vercel --help
 
-Usage: datasette publish now [OPTIONS] [FILES]...
+Usage: datasette publish vercel [OPTIONS] [FILES]...
+
+  Publish to https://vercel.com/
 
 Options:
   -m, --metadata FILENAME         Path to JSON/YAML file containing metadata to publish
