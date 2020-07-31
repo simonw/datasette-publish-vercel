@@ -34,7 +34,7 @@ def test_publish_vercel_requires_project(mock_which):
 
 
 @mock.patch("shutil.which")
-@mock.patch("datasette_publish_now.run")
+@mock.patch("datasette_publish_vercel.run")
 def test_publish_vercel(mock_run, mock_which):
     mock_which.return_value = True
     mock_run.return_value = mock.Mock(0)
@@ -42,7 +42,8 @@ def test_publish_vercel(mock_run, mock_which):
     with runner.isolated_filesystem():
         open("test.db", "w").write("data")
         result = runner.invoke(
-            cli.cli, ["publish", "vercel", "test.db", "--project", "foo", "--secret", "S"],
+            cli.cli,
+            ["publish", "vercel", "test.db", "--project", "foo", "--secret", "S"],
         )
         assert result.exit_code == 0
         mock_run.assert_has_calls(
@@ -62,7 +63,7 @@ def test_publish_vercel(mock_run, mock_which):
 
 
 @mock.patch("shutil.which")
-@mock.patch("datasette_publish_now.run")
+@mock.patch("datasette_publish_vercel.run")
 def test_publish_vercel_public(mock_run, mock_which):
     mock_which.return_value = True
     mock_run.return_value = mock.Mock(0)
@@ -101,7 +102,7 @@ def test_publish_vercel_public(mock_run, mock_which):
 
 
 @mock.patch("shutil.which")
-@mock.patch("datasette_publish_now.run")
+@mock.patch("datasette_publish_vercel.run")
 def test_publish_vercel_token(mock_run, mock_which):
     mock_which.return_value = True
     mock_run.return_value = mock.Mock(0)
@@ -143,7 +144,7 @@ def test_publish_vercel_token(mock_run, mock_which):
 
 @pytest.fixture(scope="session")
 @mock.patch("shutil.which")
-@mock.patch("datasette_publish_now.run")
+@mock.patch("datasette_publish_vercel.run")
 def generated_app_dir(mock_run, mock_which, tmp_path_factory):
     appdir = os.path.join(tmp_path_factory.mktemp("generated-app"), "app")
     mock_which.return_value = True

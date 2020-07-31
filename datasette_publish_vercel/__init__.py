@@ -52,9 +52,13 @@ def add_vercel_options(cmd):
             click.option(
                 "--no-prod", is_flag=True, help="Don't deploy directly to production",
             ),
-            click.option("--debug", is_flag=True, help="Enable Now CLI debug output",),
             click.option(
-                "--public", is_flag=True, help="Publish source with Now CLI --public",
+                "--debug", is_flag=True, help="Enable Vercel CLI debug output",
+            ),
+            click.option(
+                "--public",
+                is_flag=True,
+                help="Publish source with Vercel CLI --public",
             ),
             click.option(
                 "--generate-dir",
@@ -93,7 +97,9 @@ def _publish_vercel(
     public,
     generate_dir,
 ):
-    fail_if_publish_binary_not_installed("vercel", "Vercel", "https://vercel.com/download")
+    fail_if_publish_binary_not_installed(
+        "vercel", "Vercel", "https://vercel.com/download"
+    )
     extra_metadata = {
         "title": title,
         "license": license,

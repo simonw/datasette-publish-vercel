@@ -1,9 +1,9 @@
-# datasette-publish-now
+# datasette-publish-vercel
 
-[![PyPI](https://img.shields.io/pypi/v/datasette-publish-now.svg)](https://pypi.org/project/datasette-publish-now/)
-[![GitHub changelog](https://img.shields.io/github/v/release/simonw/datasette-publish-now?include_prereleases&label=changelog)](https://github.com/simonw/datasette-publish-now/releases)
-[![CircleCI](https://circleci.com/gh/simonw/datasette-publish-now.svg?style=svg)](https://circleci.com/gh/simonw/datasette-publish-now)
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/simonw/datasette-publish-now/blob/master/LICENSE)
+[![PyPI](https://img.shields.io/pypi/v/datasette-publish-vercel.svg)](https://pypi.org/project/datasette-publish-vercel/)
+[![GitHub changelog](https://img.shields.io/github/v/release/simonw/datasette-publish-vercel?include_prereleases&label=changelog)](https://github.com/simonw/datasette-publish-vercel/releases)
+[![CircleCI](https://circleci.com/gh/simonw/datasette-publish-vercel.svg?style=svg)](https://circleci.com/gh/simonw/datasette-publish-vercel)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/simonw/datasette-publish-vercel/blob/master/LICENSE)
 
 Datasette plugin for publishing data using [Vercel](https://vercel.com/).
 
@@ -11,27 +11,27 @@ Datasette plugin for publishing data using [Vercel](https://vercel.com/).
 
 Install this plugin in the same environment as Datasette.
 
-    $ pip install datasette-publish-now
+    $ pip install datasette-publish-vercel
 
 ## Usage
 
 First, install the Vercel CLI tool by [following their instructions](https://vercel.com/download).
 
-Run `now login` to login to (or create) an account.
+Run `vercel login` to login to (or create) an account.
 
-Now you can use `datasette publish now` to publish your data:
+Now you can use `datasette publish vercel` to publish your data:
 
-    datasette publish now my-database.db --project=my-database
+    datasette publish vercel my-database.db --project=my-database
 
 The `--project` argument is required - it specifies the project name that should be used for your deployment. This will be used as part of the deployment's URL.
 
 ### Other options
 
 * `--no-prod` deploys to the project without updating the "production" URL alias to point to that new deployment. Without that option all deploys go directly to production.
-* `--debug` enables the Now CLI debug output
+* `--debug` enables the Vercel CLI debug output
 * `--token` allows you to pass a Now authentication token, rather than needing to first run `now login` to configure the tool
-* `--public` runs `now --public` to publish the application source code at `/_src` e.g. https://datasette-public.now.sh/_src and make recent logs visible at `/_logs` e.g. https://datasette-public.now.sh/_logs
-* `--generate-dir` - by default this tool generates a new Now app in a temporary directory, deploys it and then deletes the directory. Use `--generate-dir=my-app` to output the generated application files to a new directory of your choice instead. You can then deploy it by running `now` in that directory.
+* `--public` runs `vercel --public` to publish the application source code at `/_src` e.g. https://datasette-public.now.sh/_src and make recent logs visible at `/_logs` e.g. https://datasette-public.now.sh/_logs
+* `--generate-dir` - by default this tool generates a new Vercel app in a temporary directory, deploys it and then deletes the directory. Use `--generate-dir=my-app` to output the generated application files to a new directory of your choice instead. You can then deploy it by running `vercel` in that directory.
 
 ### Full help
 
@@ -75,8 +75,8 @@ Options:
   --token TEXT                    Auth token to use for deploy
   --project PROJECT               Vercel project name to use  [required]
   --no-prod                       Don't deploy directly to production
-  --debug                         Enable Now CLI debug output
-  --public                        Publish source with Now CLI --public
+  --debug                         Enable Vercel CLI debug output
+  --public                        Publish source with Vercel CLI --public
   --generate-dir DIRECTORY        Output generated application files here
   --help                          Show this message and exit.
 ```
