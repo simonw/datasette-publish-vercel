@@ -38,7 +38,6 @@ The `--project` argument is required - it specifies the project name that should
 **Warning:** Some of these options are not yet implemented by this plugin. In particular, the following do not yet work:
 
 * `--extra-options`
-* `--static`
 * `--plugin-secret`
 * `--version-note`
 

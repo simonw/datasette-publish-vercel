@@ -152,6 +152,9 @@ def generated_app_dir(mock_run, mock_which, tmp_path_factory):
     runner = CliRunner()
     with runner.isolated_filesystem():
         open("test.db", "w").write("data")
+        static_dir = pathlib.Path(".") / "static"
+        static_dir.mkdir()
+        (static_dir / "my.css").write_text("body { color: red }")
         result = runner.invoke(
             cli.cli,
             [
@@ -161,6 +164,8 @@ def generated_app_dir(mock_run, mock_which, tmp_path_factory):
                 "--project",
                 "foo",
                 "--public",
+                "--static",
+                "static:static",
                 "--generate-dir",
                 appdir,
             ],
@@ -173,14 +178,25 @@ def generated_app_dir(mock_run, mock_which, tmp_path_factory):
 def test_publish_vercel_generate(generated_app_dir):
     # Test that the correct files were generated
     filenames = set(os.listdir(generated_app_dir))
-    assert {"requirements.txt", "index.py", "now.json", "test.db"} == filenames
+    assert {
+        "requirements.txt",
+        "static",
+        "index.py",
+        "now.json",
+        "test.db",
+    } == filenames
     index_py = open(os.path.join(generated_app_dir, "index.py")).read()
     assert (
         textwrap.dedent(
             """
     from datasette.app import Datasette
     import json
+    import pathlib
 
+    static_mounts = [
+        (static, str((pathlib.Path(".") / static).resolve()))
+        for static in ["static"]
+    ]
 
     metadata = dict()
     try:
@@ -188,10 +204,17 @@ def test_publish_vercel_generate(generated_app_dir):
     except Exception:
         pass
 
-    app = Datasette([], ["test.db"], metadata=metadata, cors=True).app()
+    app = Datasette([], ["test.db"], static_mounts=static_mounts, metadata=metadata, cors=True).app()
     """
         ).strip()
         == index_py.strip()
+    )
+
+
+def test_publish_vercel_static(generated_app_dir):
+    assert (
+        "body { color: red }"
+        == (pathlib.Path(generated_app_dir) / "static" / "my.css").read_text()
     )
 
 

@@ -14,7 +14,12 @@ import shutil
 INDEX_PY = """
 from datasette.app import Datasette
 import json
+import pathlib
 
+static_mounts = [
+    (static, str((pathlib.Path(".") / static).resolve()))
+    for static in {statics}
+]
 
 metadata = dict()
 try:
@@ -22,7 +27,7 @@ try:
 except Exception:
     pass
 
-app = Datasette([], {database_files}, metadata=metadata{extras}, cors=True).app()
+app = Datasette([], {database_files}, static_mounts=static_mounts, metadata=metadata{extras}, cors=True).app()
 """.strip()
 
 project_name_re = re.compile(r"^[a-z0-9][a-z0-9-]{1,51}$")
@@ -145,10 +150,13 @@ def _publish_vercel(
         if plugins_dir:
             extras.append('plugins_dir="{}"'.format(plugins_dir))
 
+        statics = [item[0] for item in static]
+
         open("index.py", "w").write(
             INDEX_PY.format(
                 database_files=json.dumps([os.path.split(f)[-1] for f in files]),
                 extras=", {}".format(", ".join(extras)) if extras else "",
+                statics=json.dumps(statics),
             )
         )
         datasette_install = "datasette"
