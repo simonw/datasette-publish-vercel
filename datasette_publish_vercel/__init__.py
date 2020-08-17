@@ -8,6 +8,7 @@ from subprocess import run
 import click
 import json
 import os
+import pathlib
 import re
 import shutil
 
@@ -114,6 +115,9 @@ def _publish_vercel(
         "about": about,
         "about_url": about_url,
     }
+
+    if generate_dir:
+        generate_dir = str(pathlib.Path(generate_dir).resolve())
 
     with temporary_docker_directory(
         files,
