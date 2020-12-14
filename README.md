@@ -1,8 +1,8 @@
 # datasette-publish-vercel
 
 [![PyPI](https://img.shields.io/pypi/v/datasette-publish-vercel.svg)](https://pypi.org/project/datasette-publish-vercel/)
-[![GitHub changelog](https://img.shields.io/github/v/release/simonw/datasette-publish-vercel?include_prereleases&label=changelog)](https://github.com/simonw/datasette-publish-vercel/releases)
-[![CircleCI](https://circleci.com/gh/simonw/datasette-publish-vercel.svg?style=svg)](https://circleci.com/gh/simonw/datasette-publish-vercel)
+[![Changelog](https://img.shields.io/github/v/release/simonw/datasette-publish-vercel?include_prereleases&label=changelog)](https://github.com/simonw/datasette-publish-vercel/releases)
+[![Tests](https://github.com/simonw/datasette-publish-vercel/workflows/Test/badge.svg)](https://github.com/simonw/datasette-publish-vercel/actions?query=workflow%3ATest)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/simonw/datasette-publish-vercel/blob/main/LICENSE)
 
 Datasette plugin for publishing data using [Vercel](https://vercel.com/).
@@ -11,7 +11,7 @@ Datasette plugin for publishing data using [Vercel](https://vercel.com/).
 
 Install this plugin in the same environment as Datasette.
 
-    $ pip install datasette-publish-vercel
+    $ datasette install datasette-publish-vercel
 
 ## Usage
 
