@@ -3,7 +3,7 @@
 [![PyPI](https://img.shields.io/pypi/v/datasette-publish-vercel.svg)](https://pypi.org/project/datasette-publish-vercel/)
 [![GitHub changelog](https://img.shields.io/github/v/release/simonw/datasette-publish-vercel?include_prereleases&label=changelog)](https://github.com/simonw/datasette-publish-vercel/releases)
 [![CircleCI](https://circleci.com/gh/simonw/datasette-publish-vercel.svg?style=svg)](https://circleci.com/gh/simonw/datasette-publish-vercel)
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/simonw/datasette-publish-vercel/blob/master/LICENSE)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/simonw/datasette-publish-vercel/blob/main/LICENSE)
 
 Datasette plugin for publishing data using [Vercel](https://vercel.com/).
 
@@ -52,7 +52,7 @@ Usage: datasette publish vercel [OPTIONS] [FILES]...
 Options:
   -m, --metadata FILENAME         Path to JSON/YAML file containing metadata to publish
   --extra-options TEXT            Extra options to pass to datasette serve
-  --branch TEXT                   Install datasette from a GitHub branch e.g. master
+  --branch TEXT                   Install datasette from a GitHub branch e.g. main
   --template-dir DIRECTORY        Path to directory containing custom templates
   --plugins-dir DIRECTORY         Path to directory containing custom plugins
   --static MOUNT:DIRECTORY        Serve static files from this directory at /MOUNT/...
