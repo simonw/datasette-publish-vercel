@@ -52,7 +52,7 @@ Usage: datasette publish vercel [OPTIONS] [FILES]...
 Options:
   -m, --metadata FILENAME         Path to JSON/YAML file containing metadata to publish
   --extra-options TEXT            Extra options to pass to datasette serve
-  --branch TEXT                   Install datasette from a GitHub branch e.g. main
+  --branch TEXT                   Install datasette from a GitHub branch e.g. master
   --template-dir DIRECTORY        Path to directory containing custom templates
   --plugins-dir DIRECTORY         Path to directory containing custom plugins
   --static MOUNT:DIRECTORY        Serve static files from this directory at /MOUNT/...
