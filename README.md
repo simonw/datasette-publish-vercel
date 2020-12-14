@@ -32,12 +32,13 @@ The `--project` argument is required - it specifies the project name that should
 * `--token` allows you to pass a Now authentication token, rather than needing to first run `now login` to configure the tool. Tokens can be created in the Vercel web dashboard under Account Settings -> Tokens.
 * `--public` runs `vercel --public` to publish the application source code at `/_src` e.g. https://datasette-public.now.sh/_src and make recent logs visible at `/_logs` e.g. https://datasette-public.now.sh/_logs
 * `--generate-dir` - by default this tool generates a new Vercel app in a temporary directory, deploys it and then deletes the directory. Use `--generate-dir=my-app` to output the generated application files to a new directory of your choice instead. You can then deploy it by running `vercel` in that directory.
+* `--setting default_page_size 10` - use this to set Datasette settings, as described in [the documentation](https://docs.datasette.io/en/stable/settings.html). This is a replacement for the unsupported `--extra-options` option.
 
 ### Full help
 
 **Warning:** Some of these options are not yet implemented by this plugin. In particular, the following do not yet work:
 
-* `--extra-options`
+* `--extra-options` - use `--setting` described above instead.
 * `--plugin-secret`
 * `--version-note`
 
@@ -77,5 +78,6 @@ Options:
   --debug                         Enable Vercel CLI debug output
   --public                        Publish source with Vercel CLI --public
   --generate-dir DIRECTORY        Output generated application files here
+  --setting SETTING...            Setting, see docs.datasette.io/en/stable/settings.html
   --help                          Show this message and exit.
 ```

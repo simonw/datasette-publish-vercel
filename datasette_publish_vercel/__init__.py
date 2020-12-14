@@ -3,9 +3,14 @@ from datasette.publish.common import (
     add_common_publish_arguments_and_options,
     fail_if_publish_binary_not_installed,
 )
-from datasette.utils import temporary_docker_directory
+from datasette.utils import (
+    temporary_docker_directory,
+    value_as_boolean,
+    ValueAsBooleanError,
+)
 from subprocess import run
 import click
+from click.types import CompositeParamType
 import json
 import os
 import pathlib
@@ -28,10 +33,52 @@ try:
 except Exception:
     pass
 
-app = Datasette([], {database_files}, static_mounts=static_mounts, metadata=metadata{extras}, cors=True).app()
+app = Datasette(
+    [],
+    {database_files},
+    static_mounts=static_mounts,
+    metadata=metadata{extras},
+    cors=True,
+    config={settings}
+).app()
 """.strip()
 
 project_name_re = re.compile(r"^[a-z0-9][a-z0-9-]{1,51}$")
+
+
+class Setting(CompositeParamType):
+    name = "setting"
+    arity = 2
+
+    def convert(self, config, param, ctx):
+        from datasette.app import DEFAULT_SETTINGS
+
+        name, value = config
+        if name not in DEFAULT_SETTINGS:
+            self.fail(
+                f"{name} is not a valid option (--help-config to see all)",
+                param,
+                ctx,
+            )
+            return
+        # Type checking
+        default = DEFAULT_SETTINGS[name]
+        if isinstance(default, bool):
+            try:
+                return name, value_as_boolean(value)
+            except ValueAsBooleanError:
+                self.fail(f'"{name}" should be on/off/true/false/1/0', param, ctx)
+                return
+        elif isinstance(default, int):
+            if not value.isdigit():
+                self.fail(f'"{name}" should be an integer', param, ctx)
+                return
+            return name, int(value)
+        elif isinstance(default, str):
+            return name, value
+        else:
+            # Should never happen:
+            self.fail("Invalid option")
 
 
 class ProjectName(click.ParamType):
@@ -56,10 +103,14 @@ def add_vercel_options(cmd):
                 required=True,
             ),
             click.option(
-                "--no-prod", is_flag=True, help="Don't deploy directly to production",
+                "--no-prod",
+                is_flag=True,
+                help="Don't deploy directly to production",
             ),
             click.option(
-                "--debug", is_flag=True, help="Enable Vercel CLI debug output",
+                "--debug",
+                is_flag=True,
+                help="Enable Vercel CLI debug output",
             ),
             click.option(
                 "--public",
@@ -70,6 +121,13 @@ def add_vercel_options(cmd):
                 "--generate-dir",
                 type=click.Path(dir_okay=True, file_okay=False),
                 help="Output generated application files here",
+            ),
+            click.option(
+                "--setting",
+                "settings",
+                type=Setting(),
+                help="Setting, see docs.datasette.io/en/stable/settings.html",
+                multiple=True,
             ),
         )
     ):
@@ -102,6 +160,7 @@ def _publish_vercel(
     debug,
     public,
     generate_dir,
+    settings,
 ):
     fail_if_publish_binary_not_installed(
         "vercel", "Vercel", "https://vercel.com/download"
@@ -161,12 +220,13 @@ def _publish_vercel(
                 database_files=json.dumps([os.path.split(f)[-1] for f in files]),
                 extras=", {}".format(", ".join(extras)) if extras else "",
                 statics=json.dumps(statics),
+                settings=json.dumps(dict(settings) or {}),
             )
         )
         datasette_install = "datasette"
         if branch:
-            datasette_install = "https://github.com/simonw/datasette/archive/{}.zip".format(
-                branch
+            datasette_install = (
+                "https://github.com/simonw/datasette/archive/{}.zip".format(branch)
             )
         open("requirements.txt", "w").write(
             "\n".join([datasette_install, "pysqlite3-binary"] + list(install))
@@ -227,6 +287,7 @@ def publish_subcommand(publish):
         debug,
         public,
         generate_dir,
+        settings,
     ):
         "Publish to https://vercel.com/"
         _publish_vercel(
@@ -254,6 +315,7 @@ def publish_subcommand(publish):
             debug,
             public,
             generate_dir,
+            settings,
         )
 
     @publish.command()

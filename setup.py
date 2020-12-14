@@ -23,7 +23,7 @@ setup(
     version=VERSION,
     packages=["datasette_publish_vercel"],
     entry_points={"datasette": ["publish_vercel = datasette_publish_vercel"]},
-    install_requires=["datasette>=0.44"],
+    install_requires=["datasette>=0.52"],
     extras_require={"test": ["pytest"]},
     tests_require=["datasette-publish-vercel[test]"],
 )

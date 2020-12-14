@@ -166,11 +166,17 @@ def generated_app_dir(mock_run, mock_which, tmp_path_factory):
                 "--public",
                 "--static",
                 "static:static",
+                "--setting",
+                "default_page_size",
+                "10",
+                "--setting",
+                "sql_time_limit_ms",
+                "2000",
                 "--generate-dir",
                 appdir,
             ],
         )
-        assert result.exit_code == 0
+        assert result.exit_code == 0, result.output
         assert not mock_run.called
     return appdir
 
@@ -186,7 +192,7 @@ def test_publish_vercel_generate(generated_app_dir):
         "test.db",
     } == filenames
     index_py = open(os.path.join(generated_app_dir, "index.py")).read()
-    assert (
+    assert index_py.strip() == (
         textwrap.dedent(
             """
     from datasette.app import Datasette
@@ -204,10 +210,16 @@ def test_publish_vercel_generate(generated_app_dir):
     except Exception:
         pass
 
-    app = Datasette([], ["test.db"], static_mounts=static_mounts, metadata=metadata, cors=True).app()
+    app = Datasette(
+        [],
+        ["test.db"],
+        static_mounts=static_mounts,
+        metadata=metadata,
+        cors=True,
+        config={"default_page_size": 10, "sql_time_limit_ms": 2000}
+    ).app()
     """
         ).strip()
-        == index_py.strip()
     )
 
 
