@@ -1,7 +1,7 @@
 from setuptools import setup
 import os
 
-VERSION = "0.8"
+VERSION = "0.9"
 
 
 def get_long_description():
@@ -19,6 +19,11 @@ setup(
     long_description_content_type="text/markdown",
     author="Simon Willison",
     url="https://github.com/simonw/datasette-publish-vercel",
+    project_urls={
+        "Issues": "https://github.com/simonw/datasette-publish-vercel/issues",
+        "CI": "https://github.com/simonw/datasette-publish-vercel/actions",
+        "Changelog": "https://github.com/simonw/datasette-publish-vercel/releases",
+    },
     license="Apache License, Version 2.0",
     version=VERSION,
     packages=["datasette_publish_vercel"],
