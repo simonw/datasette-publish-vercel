@@ -35,7 +35,8 @@ def test_publish_vercel_requires_project(mock_which):
 
 @mock.patch("shutil.which")
 @mock.patch("datasette_publish_vercel.run")
-def test_publish_vercel(mock_run, mock_which):
+@pytest.mark.parametrize("alias", ["vercel", "now"])
+def test_publish_vercel(mock_run, mock_which, alias):
     mock_which.return_value = True
     mock_run.return_value = mock.Mock(0)
     runner = CliRunner()
@@ -43,7 +44,7 @@ def test_publish_vercel(mock_run, mock_which):
         open("test.db", "w").write("data")
         result = runner.invoke(
             cli.cli,
-            ["publish", "vercel", "test.db", "--project", "foo", "--secret", "S"],
+            ["publish", alias, "test.db", "--project", "foo", "--secret", "S"],
         )
         assert result.exit_code == 0
         mock_run.assert_has_calls(
