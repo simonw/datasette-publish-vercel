@@ -196,12 +196,12 @@ def _publish_vercel(
     ):
         # We don't actually want the Dockerfile
         os.remove("Dockerfile")
-        open("now.json", "w").write(
+        open("vercel.json", "w").write(
             json.dumps(
                 {
                     "name": project,
                     "version": 2,
-                    "builds": [{"src": "index.py", "use": "@now/python"}],
+                    "builds": [{"src": "index.py", "use": "@vercel/python"}],
                     "routes": [{"src": "(.*)", "dest": "index.py"}],
                 },
                 indent=4,
