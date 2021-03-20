@@ -189,7 +189,7 @@ def test_publish_vercel_generate(generated_app_dir):
         "requirements.txt",
         "static",
         "index.py",
-        "now.json",
+        "vercel.json",
         "test.db",
     } == filenames
     index_py = open(os.path.join(generated_app_dir, "index.py")).read()
