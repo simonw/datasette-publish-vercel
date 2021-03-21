@@ -81,3 +81,20 @@ Options:
   --setting SETTING...            Setting, see docs.datasette.io/en/stable/settings.html
   --help                          Show this message and exit.
 ```
+## Using this with GitHub Actions
+
+This plugin can be used together with [GitHub Actions](https://github.com/features/actions) to deploy Datasette instances automatically on new pushes to a repo, or on a schedule.
+
+The GitHub Actions runners already have the Vercel deployment tool installed. You'll need to create an API token for your account at [vercel.com/account/tokens](https://vercel.com/account/tokens), and store that as a secret in your GitHub repository called `NOW_TOKEN`.
+
+Make sure your workflow has installed `datasette` and `datasette-publish-vercel` using `pip`, then add the following step to your GitHub Actions workflow:
+```
+    - name: Deploy Datasette using Vercel
+      env:
+        NOW_TOKEN: ${{ secrets.NOW_TOKEN }}
+      run: |-
+        datasette publish vercel mydb.db \
+          --token $NOW_TOKEN \
+          --project my-vercel-project
+```
+You can see a full example of a workflow that uses Vercel in this way [in the simonw/til repository](https://github.com/simonw/til/blob/12b3f0d3679320cbeafa5df164bbc08ba703625d/.github/workflows/build.yml).
