@@ -244,7 +244,7 @@ def test_help_in_readme(request):
     # Ensure the --help output embedded in the README is up-to-date
     readme_path = pathlib.Path(__file__).parent.parent / "README.md"
     readme = readme_path.read_text()
-    block_re = re.compile("```(.*)```", re.DOTALL)
+    block_re = re.compile("```(.*?)```", re.DOTALL)
     expected = block_re.search(readme).group(1).strip()
     runner = CliRunner()
     result = runner.invoke(cli.cli, ["publish", "vercel", "--help"], terminal_width=88)
