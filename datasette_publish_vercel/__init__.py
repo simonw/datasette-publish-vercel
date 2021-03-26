@@ -163,7 +163,7 @@ def _publish_vercel(
     settings,
 ):
     fail_if_publish_binary_not_installed(
-        "vercel", "Vercel", "https://vercel.com/download"
+        "vercel", "Vercel", "https://vercel.com/cli"
     )
     extra_metadata = {
         "title": title,
@@ -201,8 +201,7 @@ def _publish_vercel(
                 {
                     "name": project,
                     "version": 2,
-                    "builds": [{"src": "index.py", "use": "@vercel/python"}],
-                    "routes": [{"src": "(.*)", "dest": "index.py"}],
+                    "rewrites": [{"src": "/(.*)", "dest": "/api/data"}],
                 },
                 indent=4,
             )
@@ -215,7 +214,10 @@ def _publish_vercel(
 
         statics = [item[0] for item in static]
 
-        open("index.py", "w").write(
+        if not os.path.exists("api"):
+            os.makedirs("api")
+
+        open("api/data.py", "w").write(
             INDEX_PY.format(
                 database_files=json.dumps([os.path.split(f)[-1] for f in files]),
                 extras=", {}".format(", ".join(extras)) if extras else "",
