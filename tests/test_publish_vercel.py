@@ -33,6 +33,23 @@ def test_publish_vercel_requires_project(mock_which):
         assert "Missing option '--project'" in result.output
 
 
+@pytest.mark.parametrize("bad_name", ("ABC", "-boo", "".join(["too-long"] * 10)))
+@mock.patch("shutil.which")
+def test_publish_vercel_invalid_project_name(mock_which, bad_name):
+    mock_which.return_value = True
+    runner = CliRunner()
+    with runner.isolated_filesystem():
+        open("test.db", "w").write("data")
+        result = runner.invoke(
+            cli.cli, ["publish", "vercel", "test.db", "--project", bad_name]
+        )
+        assert result.exit_code == 2
+        assert (
+            "Project name must be lowercase, alphanumeric, max 52 chars"
+            in result.output
+        )
+
+
 @mock.patch("shutil.which")
 @mock.patch("datasette_publish_vercel.run")
 @pytest.mark.parametrize("alias", ["vercel", "now"])

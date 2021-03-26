@@ -87,7 +87,7 @@ class ProjectName(click.ParamType):
     def convert(self, value, param, ctx):
         if not project_name_re.match(value):
             self.fail(
-                "Project name must be alphanumeric, max 52 chars, cannot begin with a hyphen"
+                "Project name must be lowercase, alphanumeric, max 52 chars, cannot begin with a hyphen"
             )
         return value
 
