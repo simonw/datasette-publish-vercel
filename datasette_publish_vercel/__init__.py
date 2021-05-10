@@ -209,9 +209,9 @@ def _publish_vercel(
         )
         extras = []
         if template_dir:
-            extras.append('template_dir="{}"'.format(template_dir))
+            extras.append('template_dir="templates"')
         if plugins_dir:
-            extras.append('plugins_dir="{}"'.format(plugins_dir))
+            extras.append('plugins_dir="plugins"')
 
         statics = [item[0] for item in static]
 
