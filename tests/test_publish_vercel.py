@@ -221,6 +221,7 @@ def test_publish_vercel_generate(generated_app_dir):
     from datasette.app import Datasette
     import json
     import pathlib
+    import os
 
     static_mounts = [
         (static, str((pathlib.Path(".") / static).resolve()))
@@ -233,11 +234,14 @@ def test_publish_vercel_generate(generated_app_dir):
     except Exception:
         pass
 
+    secret = os.environ.get("DATASETTE_SECRET")
+
     app = Datasette(
         [],
         ["test.db"],
         static_mounts=static_mounts,
         metadata=metadata,
+        secret=secret,
         cors=True,
         settings={"default_page_size": 10, "sql_time_limit_ms": 2000}
     ).app()

@@ -21,6 +21,7 @@ INDEX_PY = """
 from datasette.app import Datasette
 import json
 import pathlib
+import os
 
 static_mounts = [
     (static, str((pathlib.Path(".") / static).resolve()))
@@ -33,11 +34,14 @@ try:
 except Exception:
     pass
 
+secret = os.environ.get("DATASETTE_SECRET")
+
 app = Datasette(
     [],
     {database_files},
     static_mounts=static_mounts,
     metadata=metadata{extras},
+    secret=secret,
     cors=True,
     settings={settings}
 ).app()
