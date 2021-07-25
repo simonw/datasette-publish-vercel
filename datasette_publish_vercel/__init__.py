@@ -103,6 +103,10 @@ def add_vercel_options(cmd):
                 required=True,
             ),
             click.option(
+                "--scope",
+                help="Optional Vercel scope (e.g. a team name)",
+            ),
+            click.option(
                 "--no-prod",
                 is_flag=True,
                 help="Don't deploy directly to production",
@@ -156,6 +160,7 @@ def _publish_vercel(
     about_url,
     token,
     project,
+    scope,
     no_prod,
     debug,
     public,
@@ -252,6 +257,8 @@ def _publish_vercel(
                 cmd.append("--public")
             if token:
                 cmd.extend(["--token", token])
+            if scope:
+                cmd.extend(["--scope", scope])
             # Add the secret
             cmd.extend(["--env", "DATASETTE_SECRET={}".format(secret)])
             run(cmd)

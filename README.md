@@ -74,6 +74,7 @@ Options:
   --about_url TEXT                About URL for metadata
   --token TEXT                    Auth token to use for deploy
   --project PROJECT               Vercel project name to use  [required]
+  --scope TEXT                    Optional Vercel scope (e.g. a team name)
   --no-prod                       Don't deploy directly to production
   --debug                         Enable Vercel CLI debug output
   --public                        Publish source with Vercel CLI --public
