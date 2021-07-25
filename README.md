@@ -52,7 +52,7 @@ Usage: datasette publish vercel [OPTIONS] [FILES]...
 Options:
   -m, --metadata FILENAME         Path to JSON/YAML file containing metadata to publish
   --extra-options TEXT            Extra options to pass to datasette serve
-  --branch TEXT                   Install datasette from a GitHub branch e.g. master
+  --branch TEXT                   Install datasette from a GitHub branch e.g. main
   --template-dir DIRECTORY        Path to directory containing custom templates
   --plugins-dir DIRECTORY         Path to directory containing custom plugins
   --static MOUNT:DIRECTORY        Serve static files from this directory at /MOUNT/...
@@ -60,11 +60,9 @@ Options:
   --plugin-secret <TEXT TEXT TEXT>...
                                   Secrets to pass to plugins, e.g. --plugin-secret
                                   datasette-auth-github client_id xxx
-
   --version-note TEXT             Additional note to show on /-/versions
   --secret TEXT                   Secret used for signing secure values, such as signed
                                   cookies
-
   --title TEXT                    Title for metadata
   --license TEXT                  License label for metadata
   --license_url TEXT              License URL for metadata
