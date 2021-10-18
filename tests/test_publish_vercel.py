@@ -238,7 +238,7 @@ def test_publish_vercel_generate(generated_app_dir):
         static_mounts=static_mounts,
         metadata=metadata,
         cors=True,
-        config={"default_page_size": 10, "sql_time_limit_ms": 2000}
+        settings={"default_page_size": 10, "sql_time_limit_ms": 2000}
     ).app()
     """
         ).strip()

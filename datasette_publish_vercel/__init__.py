@@ -39,7 +39,7 @@ app = Datasette(
     static_mounts=static_mounts,
     metadata=metadata{extras},
     cors=True,
-    config={settings}
+    settings={settings}
 ).app()
 """.strip()
 
