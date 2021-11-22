@@ -124,7 +124,17 @@ def add_vercel_options(cmd):
             click.option(
                 "--generate-dir",
                 type=click.Path(dir_okay=True, file_okay=False),
-                help="Output generated application files here",
+                help="Output generated application files and stop without deploying",
+            ),
+            click.option(
+                "--generate-vercel-json",
+                is_flag=True,
+                help="Output generated vercel.json file and stop without deploying",
+            ),
+            click.option(
+                "--vercel-json",
+                type=click.File(),
+                help="Custom vercel.json file to use instead of generating one",
             ),
             click.option(
                 "--setting",
@@ -165,8 +175,14 @@ def _publish_vercel(
     debug,
     public,
     generate_dir,
+    generate_vercel_json,
+    vercel_json,
     settings,
 ):
+    if vercel_json and generate_vercel_json:
+        raise click.ClickException(
+            "Cannot use both --vercel-json and --generate-vercel-json"
+        )
     fail_if_publish_binary_not_installed(
         "vercel", "Vercel", "https://vercel.com/download"
     )
@@ -182,6 +198,26 @@ def _publish_vercel(
 
     if generate_dir:
         generate_dir = str(pathlib.Path(generate_dir).resolve())
+
+    vercel_json_content = json.dumps(
+        {
+            "name": project,
+            "version": 2,
+            "builds": [{"src": "index.py", "use": "@vercel/python"}],
+            "routes": [{"src": "(.*)", "dest": "index.py"}],
+        },
+        indent=4,
+    )
+    if generate_vercel_json:
+        click.echo(vercel_json_content)
+        return
+
+    if vercel_json:
+        vercel_json_content = vercel_json.read()
+        try:
+            json.loads(vercel_json_content)
+        except ValueError:
+            raise click.ClickException("--vercel-json contents must be valid JSON")
 
     with temporary_docker_directory(
         files,
@@ -201,17 +237,7 @@ def _publish_vercel(
     ):
         # We don't actually want the Dockerfile
         os.remove("Dockerfile")
-        open("vercel.json", "w").write(
-            json.dumps(
-                {
-                    "name": project,
-                    "version": 2,
-                    "builds": [{"src": "index.py", "use": "@vercel/python"}],
-                    "routes": [{"src": "(.*)", "dest": "index.py"}],
-                },
-                indent=4,
-            )
-        )
+        open("vercel.json", "w").write(vercel_json_content)
         extras = []
         if template_dir:
             extras.append('template_dir="{}"'.format(template_dir))

@@ -76,10 +76,34 @@ Options:
   --no-prod                       Don't deploy directly to production
   --debug                         Enable Vercel CLI debug output
   --public                        Publish source with Vercel CLI --public
-  --generate-dir DIRECTORY        Output generated application files here
+  --generate-dir DIRECTORY        Output generated application files and stop without
+                                  deploying
+  --generate-vercel-json          Output generated vercel.json file and stop without
+                                  deploying
+  --vercel-json FILENAME          Custom vercel.json file to use instead of generating
+                                  one
   --setting SETTING...            Setting, see docs.datasette.io/en/stable/settings.html
   --help                          Show this message and exit.
 ```
+## Using a custom `vercel.json` file
+
+If you want to add additional redirects or similar to your Vercel configuration you may want to provide a custom `vercel.json` file.
+
+To do this, first generate a configuration file (without running a deploy) using the `--generate-vercel-json` option:
+
+    datasette publish vercel my-database.db \
+      --project=my-database \
+      --generate-vercel-json > vercel.json
+
+You can now edit the `vercel.json` file that this creates to add your custom options.
+
+Then run the deploy using:
+
+    datasette publish vercel my-database.db \
+      --project=my-database \
+      --vercel-json=vercel.json
+
+
 ## Using this with GitHub Actions
 
 This plugin can be used together with [GitHub Actions](https://github.com/features/actions) to deploy Datasette instances automatically on new pushes to a repo, or on a schedule.

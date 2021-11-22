@@ -1,6 +1,7 @@
 from click.testing import CliRunner
 from datasette import cli
 from unittest import mock
+import json
 import os
 import pathlib
 import pytest
@@ -286,3 +287,83 @@ def test_help_in_readme(request):
     assert (
         expected.strip() == actual.strip()
     ), "README out of date - try runnning: pytest --rewrite-readme"
+
+
+@mock.patch("shutil.which")
+@mock.patch("datasette_publish_vercel.run")
+def test_generate_vercel_json(mock_run, mock_which):
+    mock_which.return_value = True
+    mock_run.return_value = mock.Mock(0)
+    runner = CliRunner()
+    result = runner.invoke(
+        cli.cli,
+        ["publish", "vercel", "--project", "foo", "--generate-vercel-json"],
+    )
+    assert result.exit_code == 0
+    assert json.loads(result.output) == {
+        "name": "foo",
+        "version": 2,
+        "builds": [{"src": "index.py", "use": "@vercel/python"}],
+        "routes": [{"src": "(.*)", "dest": "index.py"}],
+    }
+
+
+def test_vercel_json_errors(tmpdir):
+    bad_json = tmpdir / "bad.json"
+    bad_json.write_text("{", "utf-8")
+    runner = CliRunner()
+    result = runner.invoke(
+        cli.cli,
+        ["publish", "vercel", "--project", "foo", "--vercel-json", str(bad_json)],
+    )
+    assert result.exit_code == 1
+    assert result.output == "Error: --vercel-json contents must be valid JSON\n"
+    # --generate-vercel-json and --vercel-json not allowed together
+    result2 = runner.invoke(
+        cli.cli,
+        [
+            "publish",
+            "vercel",
+            "--project",
+            "foo",
+            "--vercel-json",
+            str(bad_json),
+            "--generate-vercel-json",
+        ],
+    )
+    assert result2.exit_code == 1
+    assert (
+        result2.output
+        == "Error: Cannot use both --vercel-json and --generate-vercel-json\n"
+    )
+
+
+@mock.patch("shutil.which")
+@mock.patch("datasette_publish_vercel.run")
+def test_custom_vercel_json(mock_run, mock_which, tmp_path_factory, tmpdir):
+    appdir = os.path.join(tmp_path_factory.mktemp("generated-app-vercel-json"), "app")
+    vercel_json = tmpdir / "vercel.json"
+    vercel_json.write_text('{"foo": "bar"}', "utf-8")
+    mock_which.return_value = True
+    mock_run.return_value = mock.Mock(0)
+    runner = CliRunner()
+    with runner.isolated_filesystem():
+        open("test.db", "w").write("data")
+        result = runner.invoke(
+            cli.cli,
+            [
+                "publish",
+                "vercel",
+                "test.db",
+                "--project",
+                "foo",
+                "--vercel-json",
+                vercel_json,
+                "--generate-dir",
+                appdir,
+            ],
+        )
+        assert result.exit_code == 0, result.output
+        assert not mock_run.called
+        # appdir / vercel.json should be our custom code
+        assert (pathlib.Path(appdir) / "vercel.json").open().read() == '{"foo": "bar"}'
