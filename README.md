@@ -103,6 +103,11 @@ Then run the deploy using:
       --project=my-database \
       --vercel-json=vercel.json
 
+## Setting a `DATASETTE_SECRET`
+
+Datasette uses [a secret string](https://docs.datasette.io/en/stable/settings.html#configuring-the-secret) for purposes such as signing authentication cookies. This secret is reset when the server restarts, which will sign out any users who are authenticated using a signed cookie.
+
+You can avoid this by generating a `DATASETTE_SECRET` secret string and setting that as a [Vercel environment variable](https://vercel.com/docs/concepts/projects/environment-variables). If you do this the secret will stay consistent and your users will not be signed out.
 
 ## Using this with GitHub Actions
 
