@@ -18,6 +18,7 @@ import re
 import shutil
 
 INDEX_PY = """
+import asyncio
 from datasette.app import Datasette
 import json
 import pathlib
@@ -36,7 +37,7 @@ except Exception:
 
 secret = os.environ.get("DATASETTE_SECRET")
 
-app = Datasette(
+ds = Datasette(
     [],
     {database_files},
     static_mounts=static_mounts,
@@ -44,7 +45,9 @@ app = Datasette(
     secret=secret,
     cors=True,
     settings={settings}
-).app()
+)
+asyncio.run(ds.invoke_startup())
+app = ds.app()
 """.strip()
 
 project_name_re = re.compile(r"^[a-z0-9][a-z0-9-]{1,51}$")

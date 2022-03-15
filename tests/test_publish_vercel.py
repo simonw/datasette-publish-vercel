@@ -218,6 +218,7 @@ def test_publish_vercel_generate(generated_app_dir):
     assert index_py.strip() == (
         textwrap.dedent(
             """
+    import asyncio
     from datasette.app import Datasette
     import json
     import pathlib
@@ -236,7 +237,7 @@ def test_publish_vercel_generate(generated_app_dir):
 
     secret = os.environ.get("DATASETTE_SECRET")
 
-    app = Datasette(
+    ds = Datasette(
         [],
         ["test.db"],
         static_mounts=static_mounts,
@@ -244,7 +245,9 @@ def test_publish_vercel_generate(generated_app_dir):
         secret=secret,
         cors=True,
         settings={"default_page_size": 10, "sql_time_limit_ms": 2000}
-    ).app()
+    )
+    asyncio.run(ds.invoke_startup())
+    app = ds.app()
     """
         ).strip()
     )
