@@ -195,6 +195,7 @@ def generated_app_dir(mock_run, mock_which, tmp_path_factory):
                 "--setting",
                 "sql_time_limit_ms",
                 "2000",
+                "--crossdb",
                 "--generate-dir",
                 appdir,
             ],
@@ -244,7 +245,8 @@ def test_publish_vercel_generate(generated_app_dir):
         metadata=metadata,
         secret=secret,
         cors=True,
-        settings={"default_page_size": 10, "sql_time_limit_ms": 2000}
+        settings={"default_page_size": 10, "sql_time_limit_ms": 2000},
+        crossdb=True
     )
     asyncio.run(ds.invoke_startup())
     app = ds.app()

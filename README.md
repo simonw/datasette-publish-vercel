@@ -83,6 +83,7 @@ Options:
   --vercel-json FILENAME          Custom vercel.json file to use instead of generating
                                   one
   --setting SETTING...            Setting, see docs.datasette.io/en/stable/settings.html
+  --crossdb                       Enable cross-database SQL queries
   --help                          Show this message and exit.
 ```
 ## Using a custom `vercel.json` file

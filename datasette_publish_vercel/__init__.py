@@ -44,7 +44,7 @@ ds = Datasette(
     metadata=metadata{extras},
     secret=secret,
     cors=True,
-    settings={settings}
+    settings={settings}{crossdb}
 )
 asyncio.run(ds.invoke_startup())
 app = ds.app()
@@ -150,6 +150,9 @@ def add_vercel_options(cmd):
                 help="Setting, see docs.datasette.io/en/stable/settings.html",
                 multiple=True,
             ),
+            click.option(
+                "--crossdb", is_flag=True, help="Enable cross-database SQL queries"
+            ),
         )
     ):
         cmd = decorator(cmd)
@@ -185,6 +188,7 @@ def _publish_vercel(
     generate_vercel_json,
     vercel_json,
     settings,
+    crossdb,
 ):
     if vercel_json and generate_vercel_json:
         raise click.ClickException(
@@ -259,6 +263,7 @@ def _publish_vercel(
                 extras=", {}".format(", ".join(extras)) if extras else "",
                 statics=json.dumps(statics),
                 settings=json.dumps(dict(settings) or {}),
+                crossdb=",\n    crossdb=True" if crossdb else "",
             )
         )
         datasette_install = "datasette"
