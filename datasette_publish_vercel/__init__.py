@@ -8,7 +8,6 @@ from datasette.utils import (
     value_as_boolean,
     ValueAsBooleanError,
 )
-from subprocess import run
 import click
 from click.types import CompositeParamType
 import json
@@ -16,6 +15,7 @@ import os
 import pathlib
 import re
 import shutil
+import subprocess
 
 INDEX_PY = """
 import asyncio
@@ -299,7 +299,10 @@ def _publish_vercel(
                 cmd.extend(["--scope", scope])
             # Add the secret
             cmd.extend(["--env", "DATASETTE_SECRET={}".format(secret)])
-            run(cmd)
+            try:
+                subprocess.run(cmd, check=True)
+            except subprocess.CalledProcessError as ex:
+                raise click.ClickException(str(ex))
 
 
 @hookimpl
