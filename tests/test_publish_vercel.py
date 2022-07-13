@@ -74,7 +74,8 @@ def test_publish_vercel(mock_run, mock_which, alias):
                         "--prod",
                         "--env",
                         "DATASETTE_SECRET=S",
-                    ]
+                    ],
+                    check=True,
                 ),
             ]
         )
@@ -112,7 +113,8 @@ def test_publish_vercel_public(mock_run, mock_which):
                         "--public",
                         "--env",
                         "DATASETTE_SECRET=S",
-                    ]
+                    ],
+                    check=True,
                 ),
             ]
         )
@@ -156,7 +158,8 @@ def test_publish_vercel_token(mock_run, mock_which):
                         "myteam",
                         "--env",
                         "DATASETTE_SECRET=S",
-                    ]
+                    ],
+                    check=True,
                 ),
             ]
         )
