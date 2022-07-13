@@ -286,7 +286,7 @@ def _publish_vercel(
             click.echo("    vercel --prod".format(generate_dir), err=True)
         else:
             # Run the deploy with Vercel
-            cmd = ["vercel", "--confirm", "--no-clipboard"]
+            cmd = ["vercel", "--confirm"]
             if debug:
                 cmd.append("--debug")
             if not no_prod:

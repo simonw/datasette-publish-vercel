@@ -71,7 +71,6 @@ def test_publish_vercel(mock_run, mock_which, alias):
                     [
                         "vercel",
                         "--confirm",
-                        "--no-clipboard",
                         "--prod",
                         "--env",
                         "DATASETTE_SECRET=S",
@@ -109,7 +108,6 @@ def test_publish_vercel_public(mock_run, mock_which):
                     [
                         "vercel",
                         "--confirm",
-                        "--no-clipboard",
                         "--prod",
                         "--public",
                         "--env",
@@ -151,7 +149,6 @@ def test_publish_vercel_token(mock_run, mock_which):
                     [
                         "vercel",
                         "--confirm",
-                        "--no-clipboard",
                         "--prod",
                         "--token",
                         "xyz",
