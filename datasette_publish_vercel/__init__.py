@@ -37,6 +37,8 @@ except Exception:
 
 secret = os.environ.get("DATASETTE_SECRET")
 
+true, false = True, False
+
 ds = Datasette(
     [],
     {database_files},
