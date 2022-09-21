@@ -88,7 +88,7 @@ Options:
 ```
 ## Using a custom `vercel.json` file
 
-If you want to add additional redirects or similar to your Vercel configuration you may want to provide a custom `vercel.json` file.
+If you want to add additional redirects or similar to your Vercel configuration you may want to provide a custom `vercel.json` file. A full list of options is [documented here](https://vercel.com/docs/project-configuration).
 
 To do this, first generate a configuration file (without running a deploy) using the `--generate-vercel-json` option:
 
